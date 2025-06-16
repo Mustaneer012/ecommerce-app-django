@@ -8,7 +8,7 @@ class AccountAdmin(UserAdmin):
     list_display_links = ('email', 'first_name', 'last_name')
     ordering = ('-date_joined',)
     filter_horizontal = ()
-    list_filter = ()
+    list_filter = ('is_admin', 'is_staff', 'is_active', 'is_superadmin')
     fieldsets = ()
 
 admin.site.register(Account, AccountAdmin)
