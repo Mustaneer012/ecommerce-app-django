@@ -1,0 +1,146 @@
+{%extends "base.html"%}{% load static %}{%block content%}
+<section class="section-content padding-y bg">
+    <div class="container">
+        <!-- ============================ COMPONENT 1 ================================= -->
+        <div class="row">
+            <aside class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h3>Billing Address</h3>
+                        </div>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label for="first_name">First Name</label>
+                                    <input type="text" class="form-control" name="first_name" placeholder="" required>
+                                </div>
+                                <div class="col form-group">
+                                    <label for="last_name">Last Name</label>
+                                    <input type="text" class="form-control" name="last_name" placeholder="" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" name="email" placeholder="" required>
+                                </div>
+                                <div class="col form-group">
+                                    <label for="phone_number">Phone</label>
+                                    <input type="text" class="form-control" name="phone_number" placeholder="" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label for="country">Country</label>
+                                    <input type="text" class="form-control" name="country" placeholder="" required>
+                                </div>
+                                <div class="col form-group">
+                                    <label for="state">State</label>
+                                    <input type="text" class="form-control" name="state" placeholder="" required>
+                                </div>
+                                <div class="col form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" class="form-control" name="city" placeholder="" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label for="address_line_1">Address Line 1</label>
+                                    <textarea name="address_line_1" id="" class="form-control" placeholder=""
+                                        required></textarea>
+                                </div>
+
+                                <div class="col form-group">
+                                    <label for="address_line_2">Address Line 2</label>
+                                    <textarea name="address_line_2" id="" class="form-control" placeholder=""
+                                        required></textarea>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label for="">Order Notes</label>
+                                    <textarea name="order_notes" id="" class="form-control" placeholder=""></textarea>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <!-- card.// -->
+            </aside>
+            <!-- col.// -->
+            <aside class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-borderless table-shopping-cart">
+                            <thead class="text-muted">
+                                <tr class="small text-uppercase">
+                                    <th scope="col">Product</th>
+                                    <th scope="col" width="120">Quantity</th>
+                                    <th scope="col" width="120">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cart_items %}
+                                <tr>
+                                    <td>
+                                        <figure class="itemside align-items-center">
+                                            <div class="aside">
+                                                <img src="{{item.product.product_image.url}}" class="img-sm" />
+                                            </div>
+                                            <figcaption class="info">
+                                                <a href="{{item.product.get_url}}"
+                                                    class="title text-dark">{{item.product.product_name}}</a>
+                                                {% if item.variation.all%}
+                                                {% for variation in item.variation.all %}
+                                                <p class="text-muted small">
+                                                    {{variation.variation_category|capfirst}} :
+                                                    {{variation.variation_value|capfirst}} <br />
+                                                </p>
+                                                {%endfor%}
+                                                {%endif%}
+                                            </figcaption>
+                                        </figure>
+                                    </td>
+                                    <td>
+                                        <!-- col.// -->
+                                        <label for="">{{item.quantity}}</label>
+                                        <!-- col.// -->
+                                    </td>
+                                    <td>
+                                        <div class="price-wrap">
+                                            <var class="price">${{item.sub_total}}</var>
+                                            <small class="text-muted">
+                                                ${{item.product.product_price}} each
+                                            </small>
+                                        </div>
+                                        <!-- price-wrap .// -->
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <hr />
+                        <p class="text-center mb-3">
+                            <img src="{% static "/images/misc/payments.png"%}" height="26">
+                        </p>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Place Order
+                        </button>
+                        <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
+                    </div>
+                    <!-- card-body.// -->
+                    </form>
+                </div>
+                <!-- card.// -->
+            </aside>
+            <!-- col.// -->
+        </div>
+        <!-- row.// -->
+        <!-- ============================ COMPONENT 1 END .// ================================= -->
+    </div>
+    <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+{%endblock%}
