@@ -9,7 +9,7 @@
                         <div class="card-title">
                             <h3>Billing Address</h3>
                         </div>
-                        <form action="" method="post">
+                        <form action="{% url 'place_order' %}" method="post">
                             {% csrf_token %}
                             <div class="form-row">
                                 <div class="col form-group">
@@ -27,8 +27,8 @@
                                     <input type="email" class="form-control" name="email" placeholder="" required>
                                 </div>
                                 <div class="col form-group">
-                                    <label for="phone_number">Phone</label>
-                                    <input type="text" class="form-control" name="phone_number" placeholder="" required>
+                                    <label for="phone">Phone</label>
+                                    <input type="text" class="form-control" name="phone" placeholder="" required>
                                 </div>
                             </div>
                             <div class="form-row">
@@ -60,8 +60,8 @@
                             </div>
                             <div class="form-row">
                                 <div class="col form-group">
-                                    <label for="">Order Notes</label>
-                                    <textarea name="order_notes" id="" class="form-control" placeholder=""></textarea>
+                                    <label for="order_note">Order Notes</label>
+                                    <textarea name="order_note" id="" class="form-control" placeholder=""></textarea>
                                 </div>
                             </div>
                     </div>
