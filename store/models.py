@@ -3,6 +3,8 @@ from django.urls import reverse
 from accounts.models import Account
 from django.db.models import Avg, Count
 
+
+
 # Create your models here.
 class Product(models.Model):
     product_name = models.CharField(max_length=200, unique=True)

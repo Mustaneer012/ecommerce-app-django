@@ -21,3 +21,19 @@
   <!-- //container -->
 </footer>
 <!-- ========================= FOOTER END // ========================= -->
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    // Handle click on thumbnail images
+    $('.thumb li a').on('click', function (e) {
+      e.preventDefault();
+      var imgSrc = $(this).find('img').attr('src');
+      $('.mainImage img').attr('src', imgSrc);
+    });
+  });
+</script>
+
+</body>
+</html>
