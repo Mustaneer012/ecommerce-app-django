@@ -79,6 +79,55 @@ def payments(request):
     return JsonResponse(data)
 
 
+def cod_payment(request):
+    body = json.loads(request.body)
+    order = Order.objects.get(user=request.user, is_ordered=False, order_number=body['orderID'])
+
+    payment = Payment()
+    payment.user = request.user
+    payment.payment_id = "COD" + str(order.id)
+    payment.payment_method = "Cash on Delivery"
+    payment.amount_paid = order.order_total
+    payment.status = "Pending"
+    payment.save()
+
+    order.payment = payment
+    order.is_ordered = True
+    order.save()
+
+    cart_items = CartItem.objects.filter(user=request.user)
+    for item in cart_items:
+        order_product = OrderProduct()
+        order_product.order_id = order.id
+        order_product.payment = payment
+        order_product.user_id = request.user.id
+        order_product.product_id = item.product_id
+        order_product.quantity = item.quantity
+        order_product.product_price = item.product.product_price
+        order_product.ordered = True
+        order_product.save()
+
+        order_product.variation.set(item.variation.all())
+
+        product = Product.objects.get(id=item.product_id)
+        product.product_stock -= item.quantity
+        product.save()
+
+    CartItem.objects.filter(user=request.user).delete()
+
+    mail_subject = "Order Received - Cash on Delivery"
+    message = render_to_string('orders/order_recieved_email.html', {
+        'user': request.user,
+        'order': order,
+    })
+    EmailMessage(mail_subject, message, to=[request.user.email]).send()
+
+    return JsonResponse({
+        'order_number': order.order_number,
+        'transID': payment.payment_id
+    })
+
+
 
 
 def place_order(request, total=0, quantity=0,):
@@ -97,6 +146,7 @@ def place_order(request, total=0, quantity=0,):
         total += (cart_item.product.product_price * cart_item.quantity)
         quantity += cart_item.quantity
     tax = (2 * total)/100
+    # tax = 30
     grand_total = total + tax
 
     if request.method == 'POST':
@@ -137,6 +187,7 @@ def place_order(request, total=0, quantity=0,):
                 'grand_total': grand_total,
             }
             return render(request, 'orders/payments.html', context)
+            # return render(request, 'orders/order_complete.html', context)
         else:
 
             return HttpResponse("Invalid form submission")
